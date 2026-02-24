@@ -16,18 +16,13 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>Web Tasarimi ve Programlama</h1>
+      <h2>LAB -1</h2>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <p>Ad Soyad: [Ahmet Yasar Can]</p>
+        <p>Ogrenci No: [230541077]</p>
+        <p>Bolum / Hobiler: [Bilgisayar Muhendisligi / Kitap okumak, Kod yazmak]</p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
