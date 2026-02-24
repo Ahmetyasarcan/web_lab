@@ -1,8 +1,29 @@
-# React + Vite
+# Web LAB-1 - Hello Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Hakkinda
+Bu proje, Web Tasarimi ve Programlama dersi LAB-1 kapsaminda
+Vite + React + TypeScript kullanilarak olusturulmustur.
 
-Currently, two official plugins are available:
+## Gelistirici
+- **Ad Soyad:** [Ahmet Yasar Can]
+- **Ogrenci No:** [230541077]
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Kullanilan Teknolojiler
+- React 18
+- TypeScript
+- Vite
+
+## Kurulum
+```bash
+npm install
+```
+
+## Calistirma
+```bash
+npm run dev
+```
+
+Tarayicida http://localhost:5173 adresini ac.
+
+## Ekran Goruntusu
+(ekran goruntusunu buraya ekle)
