@@ -5,7 +5,7 @@ Bu proje, Web Tasarimi ve Programlama dersi LAB-1 kapsaminda
 Vite + React + TypeScript kullanilarak olusturulmustur.
 
 ## Gelistirici
-- **Ad Soyad:** [Ahmet Yasar Can]
+- **Ad Soyad:** [Ahmet Yasarcan]
 - **Ogrenci No:** [230541077]
 
 ## Kullanilan Teknolojiler
