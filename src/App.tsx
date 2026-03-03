@@ -30,34 +30,61 @@ function App() {
             arka plan sistemleri (backend) uzerinde calismayi seviyorum.
           </p>
           <h3>Kullandigim Teknolojiler</h3>
-          <ul>
-            <li>HTML5 & CSS3</li>
-            <li>JavaScript (ES6+)</li>
-            <li>React & TypeScript</li>
-            <li>Node.js</li>
+          <ul className="skill-tags" role="list" aria-label="Beceri etiketleri">
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>JavaScript</li>
+            <li>React</li>
+            <li>TypeScript</li>
+            <li>Git</li>
           </ul>
         </section>
 
         <section id="projeler">
           <h2>Projelerim</h2>
-          <article>
-            <h3>Otopark Yonetim Sistemi</h3>
-            <p>
-              Otopark icerisindeki arac giris-cikislarini takip eden, bos ve dolu
-              yerleri yoneten bir uygulamadir.
-            </p>
-            <p><strong>Teknolojiler:</strong> C#, .NET, SQL Server</p>
-            <img src="proje1.jpg" alt="Proje 1: Otopark Yonetim Sistemi Ana Ekran Goruntusu" />
-          </article>
-          <article>
-            <h3>E-ticaret Sitesi</h3>
-            <p>
-              Kullanicilarin urun arayabildigi, sepete ekledigi ve siparis verdigi,
-              yonetici panelli modern e-ticaret platformu.
-            </p>
-            <p><strong>Teknolojiler:</strong> React, Node.js, MongoDB</p>
-            <img src="proje2.jpg" alt="Proje 2: E-ticaret Sitesi Urunler Sayfasi Ekran Goruntusu" />
-          </article>
+          <div className="project-grid">
+            <article className="project-card">
+              <img src="proje1.jpg" alt="Proje 1: Otopark Yonetim Sistemi Ana Ekran Goruntusu" />
+              <h3>Otopark Yonetim Sistemi</h3>
+              <p>
+                Otopark icerisindeki arac giris-cikislarini takip eden, bos ve dolu
+                yerleri yoneten bir uygulamadir.
+              </p>
+              <ul className="skill-tags">
+                <li>C#</li>
+                <li>.NET</li>
+                <li>SQL Server</li>
+              </ul>
+            </article>
+
+            <article className="project-card">
+              <img src="proje2.jpg" alt="Proje 2: E-ticaret Sitesi Urunler Sayfasi Ekran Goruntusu" />
+              <h3>E-ticaret Sitesi</h3>
+              <p>
+                Kullanicilarin urun arayabildigi, sepete ekledigi ve siparis verdigi,
+                yonetici panelli modern e-ticaret platformu.
+              </p>
+              <ul className="skill-tags">
+                <li>React</li>
+                <li>Node.js</li>
+                <li>MongoDB</li>
+              </ul>
+            </article>
+            
+            {/* 3. Proje Eklentisi (Grid yapisini gormek adina Lab belgesindeki 3. projeyi ekledim) */}
+            <article className="project-card">
+              <img src="proje3.jpg" alt="Hava durumu uygulamasi arayuzu" />
+              <h3>Hava Durumu</h3>
+              <p>
+                OpenWeather API ile anlik
+                hava durumu bilgisi.
+              </p>
+              <ul className="skill-tags">
+                <li>JavaScript</li>
+                <li>API</li>
+              </ul>
+            </article>
+          </div>
         </section>
 
         <section id="iletisim">
