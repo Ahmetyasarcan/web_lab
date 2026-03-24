@@ -1,154 +1,137 @@
-import './App.css'
+import { useState, useEffect } from "react";
+import type { Project, Category, SortField, SortOrder } from "./types/project";
+import { fetchProjects } from "./services/projectService";
+import { applyFilters } from "./utils/projectHelpers";
+import Card from "./components/Card";
+import Input from "./components/Input";
+import Button from "./components/Button";
+import Alert from "./components/Alert";
 
-function App() {
+export default function App() {
+  // --- STATE ---
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState<Category | "all">("all");
+  const [sortField, setSortField] = useState<SortField>("year");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // --- VERi CEKME ---
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await fetchProjects();
+        setProjects(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Bilinmeyen hata");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  // --- TURETILMIS (DERIVED) VERi ---
+  const filtered = applyFilters(
+    projects, search, category, sortField, sortOrder
+  );
+
+  const categories: (Category | "all")[] = ["all", "frontend", "fullstack", "backend"];
+
+  // --- UI ---
   return (
-    <>
-      <a href="#main-content" className="skip-link">
-        Ana icerige atla
-      </a>
-      <header>
-        <h1>Ahmet Yasar Can - Portfolyo</h1>
-        <nav aria-label="Ana navigasyon">
-          <ul>
-            <li><a href="#hakkimda">Hakkimda</a></li>
-            <li><a href="#projeler">Projeler</a></li>
-            <li><a href="#iletisim">Iletisim</a></li>
-          </ul>
-        </nav>
-      </header>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+          Projelerim
+        </h1>
 
-      <main id="main-content">
-        <section id="hakkimda">
-          <h2>Hakkimda</h2>
-          <figure>
-            <img src="profil.jpg" alt="Ahmet Yasar Can'in vesikalik fotografi" />
-            <figcaption>Ahmet Yasar Can</figcaption>
-          </figure>
-          <p>
-            Merhaba! Ben Ahmet Yasar Can, modern web teknolojilerine ilgi duyan
-            bir yazilim gelistiriciyim. Kullanici tarafi (frontend) arayuzler ve
-            arka plan sistemleri (backend) uzerinde calismayi seviyorum.
-          </p>
-          <h3>Kullandigim Teknolojiler</h3>
-          <ul className="skill-tags" role="list" aria-label="Beceri etiketleri">
-            <li>HTML5</li>
-            <li>CSS3</li>
-            <li>JavaScript</li>
-            <li>React</li>
-            <li>TypeScript</li>
-            <li>Git</li>
-          </ul>
-        </section>
+        {/* HATA DURUMU */}
+        {error && (
+          <Alert variant="error" title="Hata">
+            {error}
+          </Alert>
+        )}
 
-        <section id="projeler">
-          <h2>Projelerim</h2>
-          <div className="project-grid">
-            <article className="project-card">
-              <img src="proje1.jpg" alt="Proje 1: Otopark Yonetim Sistemi Ana Ekran Goruntusu" />
-              <h3>Otopark Yonetim Sistemi</h3>
-              <p>
-                Otopark icerisindeki arac giris-cikislarini takip eden, bos ve dolu
-                yerleri yoneten bir uygulamadir.
-              </p>
-              <ul className="skill-tags">
-                <li>C#</li>
-                <li>.NET</li>
-                <li>SQL Server</li>
-              </ul>
-            </article>
+        {/* FILTRELER */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <Input id="search"
+            placeholder="Proje ara..."
+            value={search}
+            onChange={e => setSearch(e.target.value)} />
 
-            <article className="project-card">
-              <img src="proje2.jpg" alt="Proje 2: E-ticaret Sitesi Urunler Sayfasi Ekran Goruntusu" />
-              <h3>E-ticaret Sitesi</h3>
-              <p>
-                Kullanicilarin urun arayabildigi, sepete ekledigi ve siparis verdigi,
-                yonetici panelli modern e-ticaret platformu.
-              </p>
-              <ul className="skill-tags">
-                <li>React</li>
-                <li>Node.js</li>
-                <li>MongoDB</li>
-              </ul>
-            </article>
-            
-            {/* 3. Proje Eklentisi (Grid yapisini gormek adina Lab belgesindeki 3. projeyi ekledim) */}
-            <article className="project-card">
-              <img src="proje3.jpg" alt="Hava durumu uygulamasi arayuzu" />
-              <h3>Hava Durumu</h3>
-              <p>
-                OpenWeather API ile anlik
-                hava durumu bilgisi.
-              </p>
-              <ul className="skill-tags">
-                <li>JavaScript</li>
-                <li>API</li>
-              </ul>
-            </article>
+          <div className="flex gap-2 flex-wrap">
+            {categories.map(cat => (
+              <Button key={cat}
+                variant={category === cat ? "primary" : "ghost"}
+                size="sm"
+                onClick={() => setCategory(cat)}>
+                {cat === "all" ? "Tumu" : cat}
+              </Button>
+            ))}
           </div>
-        </section>
 
-        <section id="iletisim">
-          <h2>Iletisim</h2>
-          <form action="#" method="POST" noValidate>
-            <fieldset>
-              <legend>Iletisim Formu</legend>
+          <div className="flex gap-2">
+            <select value={sortField}
+              onChange={e => setSortField(e.target.value as SortField)}
+              className="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:text-white">
+              <option value="year">Yil</option>
+              <option value="title">Baslik</option>
+            </select>
+            <Button variant="ghost" size="sm"
+              onClick={() => setSortOrder(o => o === "asc" ? "desc" : "asc")}>
+              {sortOrder === "asc" ? "A-Z" : "Z-A"}
+            </Button>
+          </div>
+        </div>
 
-              <div className="form-group">
-                <label htmlFor="name">Ad Soyad:</label>
-                <input type="text" id="name" name="name"
-                  required minLength={2}
-                  aria-describedby="name-error" />
-                <small id="name-error" className="error-msg"
-                  role="alert"></small>
+        {/* YUKLENIYOR */}
+        {loading && (
+          <p className="text-center text-gray-500">
+            Yukleniyor...
+          </p>
+        )}
+
+        {/* PROJE LISTESI */}
+        {!loading && filtered.length === 0 && (
+          <p className="text-center text-gray-500">
+            Eslesen proje bulunamadi.
+          </p>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map(project => (
+            <Card key={project.id}
+              variant="elevated"
+              title={project.title}
+              image={project.image}
+              imageAlt={`${project.title} ekran goruntusu`}>
+              <p className="text-sm mb-3">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {project.tech.map(t => (
+                  <span key={t}
+                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-0.5 rounded-full">
+                    {t}
+                  </span>
+                ))}
               </div>
+              <p className="text-xs text-gray-400 mt-2">
+                {project.year} &middot; {project.category}
+              </p>
+            </Card>
+          ))}
+        </div>
 
-              <div className="form-group">
-                <label htmlFor="email">E-posta:</label>
-                <input type="email" id="email" name="email"
-                  required
-                  aria-describedby="email-error" />
-                <small id="email-error" className="error-msg"
-                  role="alert"></small>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="subject">Konu:</label>
-                <select id="subject" name="subject" required
-                  aria-describedby="subject-error">
-                  <option value="">-- Seciniz --</option>
-                  <option value="is">Is Teklifi</option>
-                  <option value="soru">Soru</option>
-                  <option value="oneri">Oneri</option>
-                </select>
-                <small id="subject-error" className="error-msg"
-                  role="alert"></small>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="message">Mesajiniz:</label>
-                <textarea id="message" name="message"
-                  rows={5} required minLength={10}
-                  aria-describedby="message-error">
-                </textarea>
-                <small id="message-error" className="error-msg"
-                  role="alert"></small>
-              </div>
-
-              <button type="submit">Gonder</button>
-            </fieldset>
-          </form>
-        </section>
-      </main>
-
-      <footer>
-        <p>&copy; 2025 Ahmet Yasar Can. Tum haklari saklidir.</p>
-        <p>
-          <a href="https://github.com/Ahmetyasarcan" target="_blank" rel="noopener noreferrer">GitHub Profilim</a> | 
-          <a href="https://linkedin.com/in/ahmetyasarcan" target="_blank" rel="noopener noreferrer">LinkedIn Profilim</a>
+        {/* SONUC SAYISI */}
+        <p className="text-sm text-gray-500 mt-4 text-center">
+          {filtered.length} / {projects.length} proje gosteriliyor
         </p>
-      </footer>
-    </>
-  )
+      </div>
+    </div>
+  );
 }
-
-export default App
